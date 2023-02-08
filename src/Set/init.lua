@@ -2,7 +2,7 @@ local Set = {}
 Set.mt = {__index = Set}
 function Set:new(values)
   local instance = {}
-  local isSet if getmetatable(values) == Set.mt then isSet = true end
+  local isSet = getmetatable(values) == Set.mt
   if type(values) == "table" then
     if not isSet and #values > 0 then
       for _,v in ipairs(values) do
@@ -35,12 +35,8 @@ function Set:anelement()
   end
 end
 
-function Set:has(e)
-  if self[e] == nil then
-    return false
-  else
-    return true
-  end
+function Set:contains(e)
+  return self[e] ~= nil
 end
 
 -- Union
@@ -79,9 +75,9 @@ Set.mt.__tostring = function (set)
   return s .. "}"
 end
 
-function Set:len()
+Set.mt.__len = function (set)
   local num = 0
-  for _ in pairs(self) do
+  for _ in pairs(set) do
     num = num + 1
   end
   return num
